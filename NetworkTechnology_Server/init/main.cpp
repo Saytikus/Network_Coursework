@@ -2,19 +2,18 @@
 
 #include <QApplication>
 
-#include "network/ApplicationServer.h"
+#include "core/Core.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
 
-    // Инициализируем сервер
-    ApplicationServer server;
-    server.init(QHostAddress::Any, 51353);
+    // Инициализируем ядро программы
+    Core core;
 
-    // Запускаем сервер
-    server.start();
+    // Инициализируем сетевой модуль программы
+    core.initNetwork();
 
     MainWindow w;
     w.show();

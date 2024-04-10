@@ -10,6 +10,11 @@ NetworkWorker::NetworkWorker(ApplicationServer *server, QObject *parent)
 {
     this->server = server;
 
+    if(!server->getIsInitialised()) {
+        // TODO: значения из статик настроек
+        server->init(QHostAddress::Any, 51353);
+    }
+
     if(!server->getIsListening()) {
         server->start();
     }

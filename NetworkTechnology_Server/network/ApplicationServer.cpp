@@ -15,6 +15,9 @@ void ApplicationServer::init(const QHostAddress initAddress, const quint16 initP
     this->incomingConnectionSocket = new QTcpSocket();
 
     this->isListening = false;
+    this->isInitialised = true;
+
+    this->start();
 }
 
 ApplicationServer::~ApplicationServer() {
@@ -166,4 +169,9 @@ void ApplicationServer::onClientDisconnected() {
 bool ApplicationServer::getIsListening() const
 {
     return isListening;
+}
+
+bool ApplicationServer::getIsInitialised() const
+{
+    return isInitialised;
 }

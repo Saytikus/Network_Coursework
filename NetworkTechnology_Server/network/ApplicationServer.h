@@ -21,6 +21,8 @@ class ApplicationServer : public QTcpServer {
 
         bool isListening;
 
+        bool isInitialised;
+
         /**
          * @brief addr - ip адрес, который сервер прослушивает
          */
@@ -73,6 +75,8 @@ class ApplicationServer : public QTcpServer {
         void close();
 
         bool getIsListening() const;
+
+        bool getIsInitialised() const;
 
 public slots:
 
