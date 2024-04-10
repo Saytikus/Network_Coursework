@@ -35,7 +35,7 @@ class ApplicationServer : public QTcpServer {
         QTcpSocket *incomingConnectionSocket;
 
         /**
-         * @brief connectedClients - словарь сетевых данных клиента и сокета
+         * @brief connectedClients - словарь сетевых данных клиента и сокета клиента
          */
         QMap<NetworkAddressData, QTcpSocket*> connectedClients;
 
@@ -110,12 +110,12 @@ class ApplicationServer : public QTcpServer {
         void messageReceived(QByteArray message);
 
         /**
-         * @brief requestRegisterClient - оповещение о запросе регистрации клиента
+         * @brief requestRegisterClient - оповещение о запросе регистрации соединения клиента
          * @param addr - ip-адрес клиента
          * @param port - порт клиента
          * @param pendingSocket - сокет клиента
          */
-        void requestRegisterClient(const QHostAddress addr, const quint16 port, const QTcpSocket* pendingSocket);
+        void requestRegisterConnection(const QHostAddress addr, const quint16 port, const QTcpSocket* pendingSocket);
 
 
 };

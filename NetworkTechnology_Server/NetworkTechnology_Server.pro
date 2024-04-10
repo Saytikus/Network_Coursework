@@ -10,11 +10,17 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    core/storage/data/Account.cpp \
+    core/storage/data/AccountBuffer.cpp \
+    core/storage/data/AccountBufferPool.cpp \
     network\ApplicationServer.cpp \
     init\main.cpp \
     ui\MainWindow.cpp
 
 HEADERS += \
+    core/storage/data/Account.h \
+    core/storage/data/AccountBuffer.h \
+    core/storage/data/AccountBufferPool.h \
     network/NetworkAddressData.h \
     network\ApplicationServer.h \
     ui\MainWindow.h

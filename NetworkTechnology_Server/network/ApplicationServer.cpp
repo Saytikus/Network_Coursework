@@ -90,8 +90,8 @@ void ApplicationServer::incomingConnection(qintptr socketDescriptor) {
     // Запоминаем новый сокет
     this->incomingConnectionSocket = newSocket;
 
-    // Отправляем запрос на регистрацию пользователя
-    emit requestRegisterClient(newSocket->peerAddress(), newSocket->peerPort(), newSocket);
+    // Отправляем запрос на регистрацию нового соединения
+    emit requestRegisterConnection(newSocket->peerAddress(), newSocket->peerPort(), newSocket);
 
 }
 
