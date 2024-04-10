@@ -1,5 +1,7 @@
 #include "AccountBufferPool.h"
 
+#include "common/logs/Logger.h"
+
 AccountBufferPool::AccountBufferPool(QObject *parent)
     : QObject{parent}
 {
@@ -19,6 +21,8 @@ void AccountBufferPool::registerAccountBuffer(const QHostAddress address, const 
 
     this->accountBuffers.append(newAccountBuffer);
 
+    Logger::recordLog("AccountBufferPool", "Зарегистрирован новый буфер! [" + QString::number(newAccountBuffer->getId()) + " " + address.toString() + ":" + QString::number(port) + "]");
+
 }
 
 void AccountBufferPool::writeSendBuffer( const quint32 accountBufferId, const QByteArray data, const qint32 size) {
@@ -32,6 +36,8 @@ void AccountBufferPool::writeSendBuffer( const quint32 accountBufferId, const QB
             buffer->writeSendBuffer(data, size);
 
             mutex.unlock();
+
+            Logger::recordLog("AccountBufferPool", "Записано в буфер отправки [" + QString::number(accountBufferId) + "]: " + data);
         }
 
     }
@@ -49,6 +55,8 @@ void AccountBufferPool::writeReadBuffer( const quint32 accountBufferId, const QB
             buffer->writeReadBuffer(data, size);
 
             mutex.unlock();
+
+            Logger::recordLog("AccountBufferPool", "Записано в буфер чтения [" + QString::number(accountBufferId) + "]: " + data);
         }
 
     }
@@ -66,6 +74,8 @@ void AccountBufferPool::clearSendBuffer(const quint32 accountBufferId) {
             buffer->clearSendBuffer();
 
             mutex.unlock();
+
+            Logger::recordLog("AccountBufferPool", "Буфер отправки очищен [" + QString::number(accountBufferId) + "]");
         }
 
     }
@@ -83,13 +93,15 @@ void AccountBufferPool::clearReadBuffer(const quint32 accountBufferId) {
             buffer->clearReadBuffer();
 
             mutex.unlock();
+
+            Logger::recordLog("AccountBufferPool", "Буфер чтения очищен [" + QString::number(accountBufferId) + "]");
         }
 
     }
 
 }
 
-void AccountBufferPool::deleteClientBuffer(const quint32 accountBufferId) {
+void AccountBufferPool::deleteAccountBuffer(const quint32 accountBufferId) {
 
     for(AccountBuffer *buffer : this->accountBuffers) {
 
@@ -104,6 +116,8 @@ void AccountBufferPool::deleteClientBuffer(const quint32 accountBufferId) {
             delete buffer;
 
             mutex.unlock();
+
+            Logger::recordLog("AccountBufferPool", "Удалён буфер [" + QString::number(accountBufferId) + "]");
         }
 
     }

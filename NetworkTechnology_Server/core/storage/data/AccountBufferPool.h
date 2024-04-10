@@ -26,7 +26,7 @@ class AccountBufferPool : public QObject {
         void clearSendBuffer(const quint32 accountBufferId);
         void clearReadBuffer(const quint32 accountBufferId);
 
-        void deleteClientBuffer(const quint32 accountBufferId);
+        void deleteAccountBuffer(const quint32 accountBufferId);
 
     public:
         explicit AccountBufferPool(QObject *parent = nullptr);
