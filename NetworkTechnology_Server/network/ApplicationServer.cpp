@@ -13,6 +13,8 @@ void ApplicationServer::init(const QHostAddress initAddress, const quint16 initP
     this->addr = initAddress;
     this->port = initPort;
     this->incomingConnectionSocket = new QTcpSocket();
+
+    this->isListening = false;
 }
 
 ApplicationServer::~ApplicationServer() {
@@ -41,7 +43,16 @@ bool ApplicationServer::start() {
         qDebug() << "Ошибка запуска сервера [" + this->addr.toString() + ":" + QString::number(this->port) + "]";
     }
 
+    this->isListening = true;
+
     return result;
+}
+
+void ApplicationServer::close() {
+
+    this->isListening = false;
+
+    QTcpServer::close();
 }
 
 /**
@@ -150,4 +161,9 @@ void ApplicationServer::onClientDisconnected() {
 
     // Очищаем память от сокета
     socket->deleteLater();
+}
+
+bool ApplicationServer::getIsListening() const
+{
+    return isListening;
 }

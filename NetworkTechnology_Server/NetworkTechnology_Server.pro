@@ -15,6 +15,7 @@ SOURCES += \
     core/storage/data/Account.cpp \
     core/storage/data/AccountBuffer.cpp \
     core/storage/data/AccountBufferPool.cpp \
+    network/NetworkWorker.cpp \
     network\ApplicationServer.cpp \
     init\main.cpp \
     ui\MainWindow.cpp
@@ -26,6 +27,7 @@ HEADERS += \
     core/storage/data/AccountBuffer.h \
     core/storage/data/AccountBufferPool.h \
     network/NetworkAddressData.h \
+    network/NetworkWorker.h \
     network\ApplicationServer.h \
     ui\MainWindow.h
 
