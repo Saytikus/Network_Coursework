@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QList>
 #include <QMutex>
+#include <QTcpServer>
 
 #include "AccountBuffer.h"
 
@@ -12,14 +13,12 @@ class AccountBufferPool : public QObject {
     Q_OBJECT
 
     private:
-        qint32 lastAccountBufferId;
+        quint32 lastAccountBufferId;
         QList<AccountBuffer*> accountBuffers;
 
         QMutex mutex;
 
     private slots:
-        void registerAccountBuffer(const QHostAddress address, const quint16 port);
-
         void writeSendBuffer(const quint32 accountBufferId, const QByteArray data, const qint32 size);
         void writeReadBuffer(const quint32 accountBufferId, const QByteArray data, const qint32 size);
 
@@ -33,10 +32,15 @@ class AccountBufferPool : public QObject {
         ~AccountBufferPool();
 
     public slots:
+        void registerAccountBuffer(const QHostAddress address, const quint16 port, const QTcpSocket* pendingSocket);
 
     signals:
-        void ReadBufferChanged(const QBuffer* read_buffer, const QString buffer_id);
-        void SendBufferChanged(const QBuffer* send_buffer, const QString buffer_id);
+
+        void accountBufferRegistered(const NetworkAddressData networkData, const QTcpSocket* pendingSocket);
+        void accountBufferAlreadyExists(const QTcpSocket* pendingSocket);
+
+        void readBufferChanged(const QByteArray newData, const quint32 qint32);
+        void sendBufferChanged(const QByteArray newData, const quint32 qint32);
 
 };
 

@@ -1,5 +1,10 @@
 #include "NetworkWorker.h"
 
+
+NetworkWorker::NetworkWorker(QObject *parent) {
+    // NO-OP
+}
+
 NetworkWorker::NetworkWorker(ApplicationServer *server, QObject *parent)
     : QObject{parent}
 {
@@ -11,6 +16,10 @@ NetworkWorker::NetworkWorker(ApplicationServer *server, QObject *parent)
 
     QObject::connect(server, &ApplicationServer::messageReceived, this, &NetworkWorker::messageReceived, Qt::QueuedConnection);
     QObject::connect(server, &ApplicationServer::requestRegisterConnection, this, &NetworkWorker::requestRegisterConnection, Qt::QueuedConnection);
+}
+
+void NetworkWorker::setServer(ApplicationServer *server) {
+    this->server = server;
 }
 
 void NetworkWorker::sendMessage(const QByteArray message, NetworkAddressData networkAddress) {

@@ -12,6 +12,7 @@ CONFIG += c++11
 SOURCES += \
     common/logs/LogRecord.cpp \
     common/logs/Logger.cpp \
+    core/Core.cpp \
     core/storage/data/Account.cpp \
     core/storage/data/AccountBuffer.cpp \
     core/storage/data/AccountBufferPool.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 HEADERS += \
     common/logs/LogRecord.h \
     common/logs/Logger.h \
+    core/Core.h \
     core/storage/data/Account.h \
     core/storage/data/AccountBuffer.h \
     core/storage/data/AccountBufferPool.h \

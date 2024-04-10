@@ -17,7 +17,10 @@ class NetworkWorker : public QObject {
         ApplicationServer *server;
 
     public:
+        explicit NetworkWorker(QObject *parent = nullptr);
         explicit NetworkWorker(ApplicationServer *server, QObject *parent = nullptr);
+
+        void setServer(ApplicationServer *server);
 
 
     public slots:

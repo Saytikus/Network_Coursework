@@ -31,6 +31,13 @@ class NetworkAddressData {
 
             this->address = other.address;
             this->port = other.port;
+
+            return *this;
+        }
+
+        bool operator==(const NetworkAddressData &other) {
+            return      this->address == other.address
+                    &&  this->port == other.port;
         }
 
         bool operator<(const NetworkAddressData other) const {
