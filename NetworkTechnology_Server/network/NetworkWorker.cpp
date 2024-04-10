@@ -9,8 +9,8 @@ NetworkWorker::NetworkWorker(ApplicationServer *server, QObject *parent)
         server->start();
     }
 
-    QObject::connect(server, &ApplicationServer::messageReceived, this, &NetworkWorker::messageReceived);
-    QObject::connect(server, &ApplicationServer::requestRegisterConnection, this, &NetworkWorker::requestRegisterConnection);
+    QObject::connect(server, &ApplicationServer::messageReceived, this, &NetworkWorker::messageReceived, Qt::QueuedConnection);
+    QObject::connect(server, &ApplicationServer::requestRegisterConnection, this, &NetworkWorker::requestRegisterConnection, Qt::QueuedConnection);
 }
 
 void NetworkWorker::sendMessage(const QByteArray message, NetworkAddressData networkAddress) {
