@@ -17,6 +17,9 @@ int main(int argc, char *argv[])
     // Инициализируем сетевой модуль программы
     core.initNetwork();
 
+    // Инициализируем логический модуль программы
+    core.initLogic();
+
     MainWindow w;
     w.show();
     return a.exec();

@@ -13,21 +13,38 @@ SOURCES += \
     common/logs/LogRecord.cpp \
     common/logs/Logger.cpp \
     core/Core.cpp \
+    core/handlers/AccountRegistrationHandler.cpp \
+    core/handlers/HandlerPool.cpp \
+    core/serializers/AccountRegistrationSerializer.cpp \
+    core/serializers/SerializerPool.cpp \
     core/storage/data/Account.cpp \
     core/storage/data/AccountBuffer.cpp \
     core/storage/data/AccountBufferPool.cpp \
+    core/workers/Worker.cpp \
+    core/workers/WorkerThreadPool.cpp \
     network/NetworkWorker.cpp \
     network\ApplicationServer.cpp \
     init\main.cpp \
     ui\MainWindow.cpp
 
 HEADERS += \
+    common/enums/EnumHandlerType.h \
     common/logs/LogRecord.h \
     common/logs/Logger.h \
     core/Core.h \
+    core/handlers/AccountRegistrationHandler.h \
+    core/handlers/BaseHandler.h \
+    core/handlers/HandlerPool.h \
+    core/serializers/AccountRegistrationSerializer.h \
+    core/serializers/BaseSerializer.h \
+    core/serializers/SerializerPool.h \
     core/storage/data/Account.h \
     core/storage/data/AccountBuffer.h \
     core/storage/data/AccountBufferPool.h \
+    core/storage/innerPackets/AccountRegistrationPacket.h \
+    core/storage/innerPackets/BasePacket.h \
+    core/workers/Worker.h \
+    core/workers/WorkerThreadPool.h \
     network/NetworkAddressData.h \
     network/NetworkWorker.h \
     network\ApplicationServer.h \

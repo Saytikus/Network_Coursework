@@ -6,6 +6,7 @@
 
 #include "storage/data/AccountBufferPool.h"
 #include "network/NetworkWorker.h"
+#include "core/workers/WorkerThreadPool.h"
 
 class Core : public QObject {
 
@@ -19,6 +20,8 @@ class Core : public QObject {
 
         NetworkWorker *netWorker;
 
+        WorkerThreadPool *workerPool;
+
     private slots:
 
     public:
@@ -27,6 +30,8 @@ class Core : public QObject {
         ~Core();
 
         void initNetwork();
+
+        void initLogic();
 
     public slots:
 

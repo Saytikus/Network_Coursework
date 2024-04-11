@@ -14,6 +14,8 @@ Core::Core(QObject *parent)
     this->netWorker = nullptr;
 
     this->networkThread = nullptr;
+
+    this->workerPool = new WorkerThreadPool();
 }
 
 Core::~Core() {
@@ -51,5 +53,13 @@ void Core::initNetwork() {
     QObject::connect(this->netWorker, &NetworkWorker::requestRegisterConnection, this->bufferPool, &AccountBufferPool::registerAccountBuffer, Qt::DirectConnection);
     QObject::connect(this->bufferPool, &AccountBufferPool::accountBufferRegistered, this->netWorker, &NetworkWorker::addPendingConnection, Qt::DirectConnection);
     QObject::connect(this->bufferPool, &AccountBufferPool::accountBufferAlreadyExists, this->netWorker, &NetworkWorker::rejectPendingConnection, Qt::DirectConnection);
+
+}
+
+void Core::initLogic() {
+
+    this->workerPool->setMaxThreadCount(4);
+
+    this->workerPool->startThreads();
 
 }
