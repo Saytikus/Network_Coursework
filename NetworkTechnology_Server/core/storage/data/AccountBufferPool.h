@@ -32,7 +32,7 @@ class AccountBufferPool : public QObject {
         ~AccountBufferPool();
 
     public slots:
-        void registerAccountBuffer(const QHostAddress address, const quint16 port, const QTcpSocket* pendingSocket);
+        void registerAccountBuffer(QHostAddress address, quint16 port, QTcpSocket* pendingSocket);
 
     signals:
 

@@ -65,11 +65,20 @@ void ApplicationServer::close() {
  */
 void ApplicationServer::send(const QByteArray message, NetworkAddressData networkAddress) {
 
-    // Берем сокет, в который нам нужно записать сообщение, по сетевым данным
-    QTcpSocket *socket = this->connectedClients.value(networkAddress);
+    for(QTcpSocket *socket : this->connectedClients.values()) {
 
-    // Записываем сообщение в сокет
-    socket->write(message);
+        if(this->connectedClients.key(socket) == networkAddress) {
+
+            // Берем сокет, в который нам нужно записать сообщение, по сетевым данным
+            QTcpSocket *socket = this->connectedClients.value(networkAddress);
+
+            // Записываем сообщение в сокет
+            socket->write(message);
+
+        }
+
+    }
+
 }
 
 /**

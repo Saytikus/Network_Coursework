@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtGlobal>
 #include <QList>
+#include <QMutex>
 
 #include "LogRecord.h"
 
@@ -16,6 +17,8 @@ class Logger : public QObject {
        // Синглтон
         static Logger *instance;
 
+        static QMutex mutex;
+
         static qint32 lastLogId;
 
         static QList<LogRecord> logRecords;
@@ -23,7 +26,7 @@ class Logger : public QObject {
 
     private:
 
-        Logger(){}
+        Logger(QObject *parent = nullptr);
         Logger(const Logger& other) = delete;
         Logger& operator=(const Logger& other) = delete;
 
@@ -34,9 +37,14 @@ class Logger : public QObject {
        // Синглтон
         static Logger* INSTANCE()
         {
+
+            Logger::mutex.lock();
+
             if(!instance) {
                 instance = new Logger();
             }
+
+            Logger::mutex.unlock();
 
             return instance;
         }

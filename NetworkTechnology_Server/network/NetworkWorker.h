@@ -5,6 +5,7 @@
 #include <QHostAddress>
 #include <QtGlobal>
 #include <QTcpSocket>
+#include <QMutex>
 
 #include "ApplicationServer.h"
 
@@ -15,6 +16,8 @@ class NetworkWorker : public QObject {
     private:
 
         ApplicationServer *server;
+
+        QMutex mutex;
 
     public:
         explicit NetworkWorker(QObject *parent = nullptr);
@@ -44,7 +47,7 @@ class NetworkWorker : public QObject {
          * @param port - порт клиента
          * @param pendingSocket - сокет клиента
          */
-        void requestRegisterConnection(const QHostAddress addr, const quint16 port, const QTcpSocket* pendingSocket);
+        void requestRegisterConnection(QHostAddress addr, quint16 port, QTcpSocket* pendingSocket);
 
 };
 

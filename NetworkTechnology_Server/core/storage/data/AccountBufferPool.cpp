@@ -2,6 +2,8 @@
 
 #include "common/logs/Logger.h"
 
+
+
 AccountBufferPool::AccountBufferPool(QObject *parent)
     : QObject{parent}
 {
@@ -12,11 +14,9 @@ AccountBufferPool::~AccountBufferPool() {
     qDeleteAll(this->accountBuffers);
 }
 
-void AccountBufferPool::registerAccountBuffer(const QHostAddress address, const quint16 port, const QTcpSocket* pendingSocket) {
+void AccountBufferPool::registerAccountBuffer(QHostAddress address, quint16 port, QTcpSocket* pendingSocket) {
 
     NetworkAddressData netData(address, port);
-
-
 
     for(AccountBuffer *buffer : this->accountBuffers) {
 
@@ -40,8 +40,7 @@ void AccountBufferPool::registerAccountBuffer(const QHostAddress address, const 
     this->accountBuffers.append(newAccountBuffer);
 
 
-
-    Logger::recordLog("AccountBufferPool", "Зарегистрирован новый буфер! [" + QString::number(newAccountBuffer->getId()) + " " + address.toString() + ":" + QString::number(port) + "]");
+    Logger::INSTANCE()->recordLog("AccountBufferPool", "Зарегистрирован новый буфер! [" + QString::number(newAccountBuffer->getId()) + " " + address.toString() + ":" + QString::number(port) + "]");
 
     emit accountBufferRegistered(netData, pendingSocket);
 }
@@ -83,7 +82,7 @@ void AccountBufferPool::writeReadBuffer( const quint32 accountBufferId, const QB
 
             mutex.unlock();
 
-            Logger::recordLog("AccountBufferPool", "Записано в буфер чтения [" + QString::number(accountBufferId) + "]: " + data);
+            Logger::INSTANCE()->recordLog("AccountBufferPool", "Записано в буфер чтения [" + QString::number(accountBufferId) + "]: " + data);
 
             emit readBufferChanged(bufferData, accountBufferId);
         }
@@ -104,7 +103,7 @@ void AccountBufferPool::clearSendBuffer(const quint32 accountBufferId) {
 
             mutex.unlock();
 
-            Logger::recordLog("AccountBufferPool", "Буфер отправки очищен [" + QString::number(accountBufferId) + "]");
+            Logger::INSTANCE()->recordLog("AccountBufferPool", "Буфер отправки очищен [" + QString::number(accountBufferId) + "]");
 
             emit sendBufferChanged(QByteArray(), accountBufferId);
         }
@@ -125,7 +124,7 @@ void AccountBufferPool::clearReadBuffer(const quint32 accountBufferId) {
 
             mutex.unlock();
 
-            Logger::recordLog("AccountBufferPool", "Буфер чтения очищен [" + QString::number(accountBufferId) + "]");
+            Logger::INSTANCE()->recordLog("AccountBufferPool", "Буфер чтения очищен [" + QString::number(accountBufferId) + "]");
 
             emit readBufferChanged(QByteArray(), accountBufferId);
         }
@@ -150,7 +149,7 @@ void AccountBufferPool::deleteAccountBuffer(const quint32 accountBufferId) {
 
             mutex.unlock();
 
-            Logger::recordLog("AccountBufferPool", "Удалён буфер [" + QString::number(accountBufferId) + "]");
+            Logger::INSTANCE()->recordLog("AccountBufferPool", "Удалён буфер [" + QString::number(accountBufferId) + "]");
         }
 
     }

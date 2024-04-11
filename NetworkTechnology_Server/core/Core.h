@@ -15,12 +15,16 @@ class Core : public QObject {
 
         AccountBufferPool *bufferPool;
 
+        QThread *networkThread;
+
         NetworkWorker *netWorker;
 
     private slots:
 
     public:
         explicit Core(QObject *parent = nullptr);
+
+        ~Core();
 
         void initNetwork();
 

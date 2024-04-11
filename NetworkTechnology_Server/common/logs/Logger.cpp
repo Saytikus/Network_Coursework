@@ -3,13 +3,23 @@
 #include <QDateTime>
 #include <QDebug>
 
+//
+#include <QThread>
+//
+
 Logger* Logger::instance = 0;
+
+QMutex Logger::mutex;
 
 qint32 Logger::lastLogId = 0;
 
 QList<LogRecord> Logger::logRecords = QList<LogRecord>();
 
 
+
+Logger::Logger(QObject *parent) : QObject{parent} {
+    //NO-OP
+}
 
 Logger::~Logger() {
 
@@ -25,13 +35,16 @@ LogRecord Logger::recordLog(QString className, QString data) {
 
     QDateTime currentDateTime = QDateTime::currentDateTime();
 
+    qDebug() << "Logger thread: " << QThread::currentThread()->objectName();
 
     QString logData;
 
     logData.append("Время: {" + currentDateTime.toString("hh:mm:ss dd.MM.yyyy") + "}")
-           .append("Класс: {" + className + "}")
-           .append(" " + data + '\n');
+           .append(" Класс: {" + className + "}")
+           .append(" " + data);
 
+
+    Logger::mutex.lock();
 
     LogRecord record(++lastLogId, logData);
 
@@ -41,6 +54,7 @@ LogRecord Logger::recordLog(QString className, QString data) {
 
     emit instance->logRecorded(record);
 
+    Logger::mutex.unlock();
 
     return record;
 }
