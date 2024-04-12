@@ -1,10 +1,11 @@
 #include "Worker.h"
 
 #include "common/enums/EnumHandlerType.h"
-#include "core/handlers/AccountRegistrationHandler.h"
 #include <QDataStream>
 
-
+#include "core/storage/data/AccountBufferPool.h"
+#include "common/logs/Logger.h"
+#include <QThread>
 
 Worker::Worker(const quint32 initId, QObject *parent)
     : QObject{parent}
@@ -13,17 +14,31 @@ Worker::Worker(const quint32 initId, QObject *parent)
 }
 
 
-void Worker::doWork(QByteArray packet) {
+void Worker::doWork() {
 
-    QDataStream readStream(&packet, QIODevice::ReadOnly);
+    // Бесконечно выполняем работу
+    while(true) {        
 
-    EnumHandlerType commandType;
+        // Если в пуле буферов есть пакет на обработку
+        if(AccountBufferPool::INSTANCE()->getHasReadPacket()) {
 
-    readStream >> commandType;
+            //Logger::recordLog("Worker", "Я - рабочий №" + QThread::currentThread()->objectName() + ", НАШЕЛ РАБОТУ");
 
-    BasePacket innerPacket = this->serializerPool.getSerializer(commandType).deserialize(commandType, packet);
+            // Берем пакет
+            QByteArray packet = AccountBufferPool::INSTANCE()->takeReadPacket();
 
-    this->handlerPool.getHandler(commandType).handle(innerPacket);
+            // Считываем тип команды
+            QDataStream readStream(&packet, QIODevice::ReadOnly);
+            EnumHandlerType commandType;
+            readStream >> commandType;
+
+            // Десериализуем пакет во внутренний
+            BasePacket innerPacket = this->serializerPool.getSerializer(commandType).deserialize(commandType, packet);
+
+            // Обрабатываем пакет
+            this->handlerPool.getHandler(commandType).handle(innerPacket);
+        }
+    }
 
 }
 

@@ -14,7 +14,7 @@ class Logger : public QObject {
 
     private:
 
-       // Синглтон
+        // Синглтон
         static Logger *instance;
 
         static QMutex mutex;
@@ -34,17 +34,20 @@ class Logger : public QObject {
 
     public:
 
-       // Синглтон
+        // Синглтон
         static Logger* INSTANCE()
         {
 
-            Logger::mutex.lock();
-
             if(!instance) {
-                instance = new Logger();
-            }
 
-            Logger::mutex.unlock();
+                Logger::mutex.lock();
+
+                if(!instance) {
+                    instance = new Logger();
+                }
+
+                Logger::mutex.unlock();
+            }
 
             return instance;
         }

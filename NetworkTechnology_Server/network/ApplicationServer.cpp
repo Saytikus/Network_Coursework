@@ -1,6 +1,6 @@
 #include "ApplicationServer.h"
 
-
+#include "common/logs/Logger.h"
 
 /**
  * @brief init - метод инициализации сервера
@@ -22,9 +22,15 @@ void ApplicationServer::init(const QHostAddress initAddress, const quint16 initP
 
 ApplicationServer::~ApplicationServer() {
 
+    Logger::recordLog("ApplicationServer", "Зашли в деструктор ApplicationServer");
+
     qDeleteAll(this->connectedClients);
 
+    Logger::recordLog("ApplicationServer", "Удалили connectedClients");
+
     delete this->incomingConnectionSocket;
+
+    Logger::recordLog("ApplicationServer", "Удалили incomingConnectionSocket");
 
 }
 

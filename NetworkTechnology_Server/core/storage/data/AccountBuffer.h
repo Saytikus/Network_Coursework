@@ -17,11 +17,15 @@ class AccountBuffer : public QObject {
 
         NetworkAddressData networkData;
 
-        QBuffer sendBuffer;
-        QBuffer readBuffer;
+        // Да, это плохо
+        QList<QByteArray> sendBuffer;
+        QList<QByteArray> readBuffer;
+
+        bool hasReadData;
+        bool hasSendData;
 
     public:
-        explicit AccountBuffer(const quint32 initId, const NetworkAddressData initNetworkData, QByteArray *initSendBuffer, QByteArray *initReadBuffer, QObject *parent = nullptr);
+        explicit AccountBuffer(const quint32 initId, const NetworkAddressData initNetworkData, QObject *parent = nullptr);
 
 
         quint32 getId() const;
@@ -33,15 +37,23 @@ class AccountBuffer : public QObject {
 
         void writeReadBuffer(const QByteArray data, const qint32 size);
 
-        QByteArray getSendBuffer() const;
+        QList<QByteArray> getSendBuffer() const;
 
-        QByteArray getReadBuffer() const;
+        QList<QByteArray> getReadBuffer() const;
 
         void clearSendBuffer();
 
         void clearReadBuffer();
 
-    signals:
+        QByteArray takeSendData();
+
+        QByteArray takeReadData();
+
+        bool getHasReadData() const;
+
+        bool getHasSendData() const;
+
+signals:
 
 };
 

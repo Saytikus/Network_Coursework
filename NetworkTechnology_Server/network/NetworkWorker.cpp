@@ -1,8 +1,13 @@
 #include "NetworkWorker.h"
 
+#include "common/logs/Logger.h"
 
-NetworkWorker::NetworkWorker(QObject *parent) {
-    // NO-OP
+
+
+NetworkWorker::~NetworkWorker() {
+    Logger::recordLog("NetworkWorker", "Зашли в деструктор NetworkWorker");
+
+    //delete server;
 }
 
 NetworkWorker::NetworkWorker(ApplicationServer *server, QObject *parent)

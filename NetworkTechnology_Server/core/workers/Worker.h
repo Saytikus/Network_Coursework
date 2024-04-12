@@ -25,10 +25,11 @@ class Worker : public QObject {
 
     public slots:
 
-        void doWork(QByteArray packet);
+        void doWork();
 
 
     signals:
+        void finished();
 
 };
 

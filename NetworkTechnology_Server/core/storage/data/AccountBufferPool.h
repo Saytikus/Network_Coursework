@@ -13,34 +13,69 @@ class AccountBufferPool : public QObject {
     Q_OBJECT
 
     private:
-        quint32 lastAccountBufferId;
-        QList<AccountBuffer*> accountBuffers;
 
-        QMutex mutex;
+        // Синглтон
+        static AccountBufferPool *instance;
+
+        static quint32 lastAccountBufferId;
+        static QList<AccountBuffer*> accountBuffers;
+
+        static bool hasReadPacket;
+        static bool hasSendPacket;
+
+        static QMutex mutex;
+
+
+    private:
+        static void calculateHasReadPacket();
+        static void calculateHasSendPacket();
 
     private slots:
-        void writeSendBuffer(const quint32 accountBufferId, const QByteArray data, const qint32 size);
-        void writeReadBuffer(const quint32 accountBufferId, const QByteArray data, const qint32 size);
 
-        void clearSendBuffer(const quint32 accountBufferId);
-        void clearReadBuffer(const quint32 accountBufferId);
+        static void clearSendBuffer(const quint32 accountBufferId);
+        static void clearReadBuffer(const quint32 accountBufferId);
 
-        void deleteAccountBuffer(const quint32 accountBufferId);
+        static void deleteAccountBuffer(const quint32 accountBufferId);
 
     public:
         explicit AccountBufferPool(QObject *parent = nullptr);
         ~AccountBufferPool();
 
-    public slots:
-        void registerAccountBuffer(QHostAddress address, quint16 port, QTcpSocket* pendingSocket);
+        // Синглтон
+        static AccountBufferPool* INSTANCE()
+        {
+
+            if(!instance) {
+
+                AccountBufferPool::mutex.lock();
+
+                if(!instance) {
+                    instance = new AccountBufferPool();
+                }
+
+                AccountBufferPool::mutex.unlock();
+            }
+
+            return instance;
+        }
+
+        static bool getHasReadPacket();
+
+        static bool getHasSendPacket();
+
+public slots:
+        static void registerAccountBuffer(QHostAddress address, quint16 port, QTcpSocket* pendingSocket);
+
+        static void writeSendBuffer(const quint32 accountBufferId, const QByteArray data, const qint32 size);
+        static void writeReadBuffer(const quint32 accountBufferId, const QByteArray data, const qint32 size);
+
+        static QByteArray takeSendPacket();
+        static QByteArray takeReadPacket();
 
     signals:
 
         void accountBufferRegistered(const NetworkAddressData networkData, const QTcpSocket* pendingSocket);
         void accountBufferAlreadyExists(const QTcpSocket* pendingSocket);
-
-        void readBufferChanged(const QByteArray newData, const quint32 qint32);
-        void sendBufferChanged(const QByteArray newData, const quint32 qint32);
 
 };
 

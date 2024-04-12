@@ -20,8 +20,9 @@ class NetworkWorker : public QObject {
         QMutex mutex;
 
     public:
-        explicit NetworkWorker(QObject *parent = nullptr);
+        explicit NetworkWorker(QObject *parent = nullptr) = delete;
         explicit NetworkWorker(ApplicationServer *server, QObject *parent = nullptr);
+        ~NetworkWorker();
 
         void setServer(ApplicationServer *server);
 
@@ -34,6 +35,8 @@ class NetworkWorker : public QObject {
         void rejectPendingConnection(const QTcpSocket* pendingSocket);
 
     signals:
+
+        void finished();
 
         /**
          * @brief messageReceived - оповещение о получении сообщения

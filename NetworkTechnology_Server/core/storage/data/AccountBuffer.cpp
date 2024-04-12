@@ -1,13 +1,17 @@
 #include "AccountBuffer.h"
 
 
-AccountBuffer::AccountBuffer(const quint32 initId, const NetworkAddressData initNetworkData, QByteArray *initSendBuffer, QByteArray *initReadBuffer, QObject *parent)
+
+AccountBuffer::AccountBuffer(const quint32 initId, const NetworkAddressData initNetworkData, QObject *parent)
     : QObject{parent}
 {
     this->id = initId;
     this->networkData = initNetworkData;
-    this->sendBuffer.setBuffer(initSendBuffer);
-    this->readBuffer.setBuffer(initReadBuffer);
+    this->sendBuffer = QList<QByteArray>();
+    this->readBuffer = QList<QByteArray>();
+
+    this->hasSendData = false;
+    this->hasReadData = false;
 }
 
 quint32 AccountBuffer::getId() const {
@@ -23,34 +27,78 @@ void AccountBuffer::setNetworkData(const NetworkAddressData newNetworkData) {
 }
 
 void AccountBuffer::writeSendBuffer(const QByteArray data, const qint32 size) {
-    this->sendBuffer.open(QIODevice::WriteOnly);
 
-    this->sendBuffer.write(data, size);
+    if(data.isEmpty() || data.isNull()) {
+        return;
+    }
 
-    this->sendBuffer.close();
+    this->sendBuffer.append(data);
+
+    if(!this->hasSendData) {
+        this->hasSendData = true;
+    }
 }
 
 void AccountBuffer::writeReadBuffer(const QByteArray data, const qint32 size) {
-    this->readBuffer.open(QIODevice::WriteOnly);
 
-    this->readBuffer.write(data, size);
+    if(data.isEmpty() || data.isNull()) {
+        return;
+    }
 
-    this->readBuffer.close();
+    this->readBuffer.append(data);
+
+    if(!this->hasReadData) {
+        this->hasReadData = true;
+    }
 }
 
-QByteArray AccountBuffer::getSendBuffer() const {
-    return sendBuffer.buffer();
+QList<QByteArray> AccountBuffer::getSendBuffer() const {
+    return sendBuffer;
 }
 
-QByteArray AccountBuffer::getReadBuffer() const {
-    return readBuffer.buffer();
+QList<QByteArray> AccountBuffer::getReadBuffer() const {
+    return readBuffer;
 }
 
 void AccountBuffer::clearSendBuffer() {
-    this->sendBuffer.buffer().clear();
+    this->sendBuffer.clear();
 }
 
 void AccountBuffer::clearReadBuffer() {
-    this->readBuffer.buffer().clear();
+    this->readBuffer.clear();
 }
 
+QByteArray AccountBuffer::takeSendData() {
+    if(this->hasSendData) {
+
+        if(this->sendBuffer.size() == 1) {
+            this->hasSendData = false;
+        }
+
+        return this->sendBuffer.takeFirst();
+
+    }
+
+}
+
+QByteArray AccountBuffer::takeReadData() {
+    if(this->hasReadData) {
+
+        if(this->readBuffer.size() == 1) {
+            this->hasReadData = false;
+        }
+
+        return this->readBuffer.takeFirst();
+
+    }
+}
+
+bool AccountBuffer::getHasReadData() const
+{
+    return hasReadData;
+}
+
+bool AccountBuffer::getHasSendData() const
+{
+    return hasSendData;
+}

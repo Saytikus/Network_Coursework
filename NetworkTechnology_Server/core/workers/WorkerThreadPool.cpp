@@ -1,6 +1,7 @@
 #include "WorkerThreadPool.h"
 
 #include "common/logs/Logger.h"
+#include "qdebug.h"
 
 WorkerThreadPool::WorkerThreadPool(QObject *parent)
     : QObject{parent}
@@ -12,12 +13,11 @@ WorkerThreadPool::WorkerThreadPool(QObject *parent)
 
 WorkerThreadPool::~WorkerThreadPool() {
 
-    for(QPair<QThread*, Worker*> workerPair : this->workers) {
+    for(QPair<QThread*, Worker*> workerPair : this->workers.values()) {
 
-        workerPair.first->quit();
-        workerPair.first->wait();
+        workerPair.first->terminate();
 
-        delete workerPair.second;
+        workerPair.second->deleteLater();
     }
 
 }
@@ -39,7 +39,10 @@ bool WorkerThreadPool::startThreads() {
         worker->moveToThread(thread);
         Logger::INSTANCE()->recordLog("WorkerThreadPool", "Worker запущен в потоке " + worker->thread()->objectName());
 
-        QObject::connect(this, &WorkerThreadPool::workRequested, worker, &Worker::doWork);
+        QObject::connect(thread, &QThread::started, worker, &Worker::doWork);
+        QObject::connect(thread, &QThread::finished, worker, &Worker::finished);
+        QObject::connect(worker, &Worker::finished, thread, &QThread::deleteLater);
+        QObject::connect(thread, &QThread::finished, worker, &Worker::deleteLater);
 
         this->workers.insert(currentThreadNumber, QPair<QThread*, Worker*>(thread, worker));
 
@@ -63,11 +66,10 @@ bool WorkerThreadPool::stopThreads() {
     for(quint32 workerId : this->workers.keys()) {
 
         // Останавливаем поток рабочего
-        this->workers.value(workerId).first->quit();
-        this->workers.value(workerId).first->wait();
+        this->workers.value(workerId).first->terminate();
 
         // Очищаем память от рабочего
-        delete this->workers.value(workerId).second;
+        this->workers.value(workerId).second->deleteLater();
 
         // Удаляем рабочего из списка
         this->workers.remove(workerId);

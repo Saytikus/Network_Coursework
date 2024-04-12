@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QtGlobal>
 
-#include "storage/data/AccountBufferPool.h"
 #include "network/NetworkWorker.h"
 #include "core/workers/WorkerThreadPool.h"
 
@@ -13,8 +12,6 @@ class Core : public QObject {
     Q_OBJECT
 
     private:
-
-        AccountBufferPool *bufferPool;
 
         QThread *networkThread;
 

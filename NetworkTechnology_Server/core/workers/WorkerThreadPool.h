@@ -33,7 +33,7 @@ class WorkerThreadPool : public QObject {
         bool setMaxThreadCount(const quint32 maxThreadCount);
 
     signals:
-        void workRequested(QByteArray packet);
+
 
 };
 
