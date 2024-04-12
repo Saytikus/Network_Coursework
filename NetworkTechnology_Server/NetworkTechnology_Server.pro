@@ -21,6 +21,7 @@ SOURCES += \
     core/storage/data/AccountBuffer.cpp \
     core/storage/data/AccountBufferPool.cpp \
     core/storage/database/Database.cpp \
+    core/storage/database/DatabaseFileCreator.cpp \
     core/storage/database/DatabaseReader.cpp \
     core/storage/database/DatabaseWriter.cpp \
     core/storage/database/XMLElementReader.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     core/storage/data/AccountBuffer.h \
     core/storage/data/AccountBufferPool.h \
     core/storage/database/Database.h \
+    core/storage/database/DatabaseFileCreator.h \
     core/storage/database/DatabaseReader.h \
     core/storage/database/DatabaseWriter.h \
     core/storage/database/XMLElementReader.h \

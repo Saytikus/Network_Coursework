@@ -2,12 +2,14 @@
 
 #include <QMap>
 #include <QFile>
+#include <QDir>
 
-#include "common/const/FilePathConstants.h"
 #include "common/logs/Logger.h"
 #include "XMLHelper.h"
 #include "core/storage/data/Account.h"
 #include "XMLElementReader.h"
+#include "DatabaseFileCreator.h"
+
 
 DatabaseReader::DatabaseReader(QObject *parent)
     : QObject{parent}
@@ -17,38 +19,19 @@ DatabaseReader::DatabaseReader(QObject *parent)
 
 Database DatabaseReader::readDatabaseFile(QString path) {
 
-    //QString pathToStockDatabase = "../SecurityHelper/rss/StockDatabase/";
 
     if (!XMLHelper::checkFile(path)) {
 
-        Logger::recordLog("DatabaseReader", "Файл базы данных не найден, создаю чистый файл базы данных");
+        Logger::recordLog("DatabaseReader", "Файл базы данных не найден, запрашиваю создание чистого файла базы данных");
 
+        DatabaseFileCreator::createDatabaseFile();
 
-        /// DEBUG
-
-        QFile emptyDatabaseFile(FilePathConstants::getDatabasePath() + FilePathConstants::getDatabaseFileName());
-
-        emptyDatabaseFile.open(QFile::ReadOnly | QFile::Text);
-
-        if(!emptyDatabaseFile.isOpen()) {
-            Logger::recordLog("DatabaseReader", "Не удалось создать чистый файл базы данных");
-            return Database();
-        }
-
-        QDomDocument databaseDoc;
-        XMLHelper::writeXMLHeader(&databaseDoc);
-
-        QDomElement databaseElement = XMLHelper::writeXMLStructTree(&databaseDoc, "Accounts");
-
-
-        //return XMLHelper::readDatabase(pathToStockDatabase);
-
-        /// DEBUG
+        return Database();
     }
 
     QMap<quint32, Account> accounts;
 
-    QFile databaseFile(path + "Events.xml");
+    QFile databaseFile(path);
     databaseFile.open(QFile::ReadOnly | QFile::Text);
     QDomDocument accountsDoc;
     accountsDoc.setContent(&databaseFile);
@@ -70,8 +53,8 @@ Account DatabaseReader::readAccount(QDomElement xmlDomElement) {
 
     quint32 accountId = XMLElementReader::readUint(xmlDomElement, "id");
 
-    QString accountLogin = XMLElementReader::readText(xmlDomElement, "password");;
-    QString accountPassword = XMLElementReader::readText(xmlDomElement, "login");;
+    QString accountLogin = XMLElementReader::readText(xmlDomElement, "login");;
+    QString accountPassword = XMLElementReader::readText(xmlDomElement, "password");;
 
     QStringList accountData = XMLElementReader::readTexts(xmlDomElement, "data");
 

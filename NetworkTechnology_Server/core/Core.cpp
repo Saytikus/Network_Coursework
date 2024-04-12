@@ -1,10 +1,14 @@
 #include "Core.h"
 
+#include "common/logs/Logger.h"
 #include "network/ApplicationServer.h"
 
 #include <QThread>
 
+#include "core/storage/database/DatabaseReader.h"
+#include "core/storage/database/DatabaseWriter.h"
 
+#include "common/const/FilePathConstants.h"
 
 Core::Core(QObject *parent)
     : QObject{parent}

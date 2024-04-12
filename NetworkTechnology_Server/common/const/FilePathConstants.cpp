@@ -1,7 +1,7 @@
 #include "FilePathConstants.h"
 
 
-QString FilePathConstants::databasePath = "../NetworkTechnology_Server/database";
+QString FilePathConstants::databasePath = "./database/";
 
 QString FilePathConstants::databaseFileName = "database.xml";
 

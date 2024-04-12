@@ -7,7 +7,7 @@
 #include "XMLHelper.h"
 #include "core/storage/data/Account.h"
 #include "XMLElementWriter.h"
-
+#include "DatabaseFileCreator.h"
 
 DatabaseWriter::DatabaseWriter(QObject *parent)
     : QObject{parent}
@@ -17,14 +17,23 @@ DatabaseWriter::DatabaseWriter(QObject *parent)
 
 void DatabaseWriter::writeDatabase(QString path, Database database) {
 
+    if (!XMLHelper::checkFile(path)) {
+
+        Logger::recordLog("DatabaseWriter", "Файл базы данных не найден, запрашиваю создание чистого файла базы данных");
+
+        DatabaseFileCreator::createDatabaseFile();
+
+    }
+
     DatabaseWriter::writeDatabaseAccounts(path, database.getAccounts());
 
 }
 
 void DatabaseWriter::writeDatabaseAccounts(QString path, QMap<quint32, Account> accounts) {
 
-    QFile accountsFile(path + "Events.xml");
+    QFile accountsFile(path);
     accountsFile.open(QFile::WriteOnly | QFile::Text);
+
     QDomDocument accountsDoc;
     XMLHelper::writeXMLHeader(&accountsDoc);
 
@@ -35,7 +44,7 @@ void DatabaseWriter::writeDatabaseAccounts(QString path, QMap<quint32, Account> 
 
         XMLElementWriter::writeUint(accountsDoc, eventElement , "id", account.getId());
 
-        XMLElementWriter::writeText(accountsDoc, eventElement , "password", account.getPassword());
+        XMLElementWriter::writeText(accountsDoc, eventElement , "login", account.getLogin());
         XMLElementWriter::writeText(accountsDoc, eventElement , "password", account.getPassword());
 
         XMLElementWriter::writeTexts(accountsDoc, eventElement , "data", account.getData());

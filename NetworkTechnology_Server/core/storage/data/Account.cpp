@@ -1,6 +1,9 @@
 #include "Account.h"
 
 
+Account::Account(QObject *parent) : QObject{parent} {
+    // NO-OP
+}
 
 Account::Account(const quint32 initId, const QString initLogin, const QString initPassword, const QStringList initData, QObject *parent)
     : QObject{parent}

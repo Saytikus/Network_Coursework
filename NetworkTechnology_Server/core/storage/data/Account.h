@@ -21,6 +21,8 @@ class Account : public QObject {
         QStringList data;
 
     public:
+        Account(QObject *parent = nullptr);
+
         Account(const quint32 initId, const QString initLogin, const QString initPassword, const QStringList initData, QObject *parent = nullptr);
 
         Account(const Account &other);
