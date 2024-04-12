@@ -30,7 +30,7 @@ Core::~Core() {
 
 void Core::initNetwork() {
 
-    qRegisterMetaType<QHostAddress>("QHostAddress");
+    //qRegisterMetaType<QHostAddress>("QHostAddress");
 
 
     this->netWorker = new NetworkWorker();

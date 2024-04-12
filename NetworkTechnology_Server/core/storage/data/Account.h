@@ -14,8 +14,6 @@ class Account : public QObject {
 
         quint32 id;
 
-        quint32 bufferId;
-
         QString login;
 
         QString password;
@@ -23,11 +21,13 @@ class Account : public QObject {
         QStringList data;
 
     public:
-        explicit Account(const quint32 initId, const quint32 initBufferId, const QString initLogin, const QString initPassword, const QStringList initData, QObject *parent = nullptr);
+        Account(const quint32 initId, const QString initLogin, const QString initPassword, const QStringList initData, QObject *parent = nullptr);
+
+        Account(const Account &other);
+
+        Account& operator=(const Account &other);
 
         quint32 getId() const;
-
-        quint32 getBufferId() const;
 
         QString getLogin() const;
 
@@ -35,6 +35,8 @@ class Account : public QObject {
         void setPassword(const QString newPassword);
 
         QStringList getData() const;
+        void setData(const QStringList newData);
+
 
         void appendDataString(const QString dataString);
 

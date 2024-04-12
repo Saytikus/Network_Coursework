@@ -2,14 +2,39 @@
 
 
 
-Account::Account(const quint32 initId, const quint32 initBufferId, const QString initLogin, const QString initPassword, const QStringList initData, QObject *parent)
+Account::Account(const quint32 initId, const QString initLogin, const QString initPassword, const QStringList initData, QObject *parent)
     : QObject{parent}
 {
     this->id = initId;
-    this->bufferId = initBufferId;
     this->login = initLogin;
     this->password = initPassword;
+    this->data = initData;
 }
+
+Account::Account(const Account &other) {
+    this->id = other.id;
+    this->login = other.login;
+    this->password = other.password;
+    this->data = other.data;
+}
+
+Account& Account::operator=(const Account &other) {
+    if(&other == this) {
+        return *this;
+    }
+
+    QObject::setParent(other.parent());
+
+    this->id = other.id;
+    this->login = other.login;
+    this->password = other.password;
+    this->data = other.data;
+
+    return *this;
+}
+
+
+
 
 void Account::appendDataString(const QString dataString) {
     this->data.append(dataString);
@@ -35,12 +60,12 @@ QStringList Account::getData() const {
     return data;
 }
 
-quint32 Account::getId() const {
-    return id;
+void Account::setData(const QStringList newData) {
+    this->data = newData;
 }
 
-quint32 Account::getBufferId() const {
-    return bufferId;
+quint32 Account::getId() const {
+    return id;
 }
 
 QString Account::getLogin() const {

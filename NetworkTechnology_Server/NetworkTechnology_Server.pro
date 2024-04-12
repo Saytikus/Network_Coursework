@@ -1,5 +1,4 @@
-QT       += core gui
-QT       += network
+QT += core gui xml network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    common/const/FilePathConstants.cpp \
     common/logs/LogRecord.cpp \
     common/logs/Logger.cpp \
     core/Core.cpp \
@@ -20,6 +20,12 @@ SOURCES += \
     core/storage/data/Account.cpp \
     core/storage/data/AccountBuffer.cpp \
     core/storage/data/AccountBufferPool.cpp \
+    core/storage/database/Database.cpp \
+    core/storage/database/DatabaseReader.cpp \
+    core/storage/database/DatabaseWriter.cpp \
+    core/storage/database/XMLElementReader.cpp \
+    core/storage/database/XMLElementWriter.cpp \
+    core/storage/database/XMLHelper.cpp \
     core/workers/Worker.cpp \
     core/workers/WorkerThreadPool.cpp \
     network/NetworkWorker.cpp \
@@ -28,6 +34,7 @@ SOURCES += \
     ui\MainWindow.cpp
 
 HEADERS += \
+    common/const/FilePathConstants.h \
     common/enums/EnumHandlerType.h \
     common/logs/LogRecord.h \
     common/logs/Logger.h \
@@ -41,6 +48,12 @@ HEADERS += \
     core/storage/data/Account.h \
     core/storage/data/AccountBuffer.h \
     core/storage/data/AccountBufferPool.h \
+    core/storage/database/Database.h \
+    core/storage/database/DatabaseReader.h \
+    core/storage/database/DatabaseWriter.h \
+    core/storage/database/XMLElementReader.h \
+    core/storage/database/XMLElementWriter.h \
+    core/storage/database/XMLHelper.h \
     core/storage/innerPackets/AccountRegistrationPacket.h \
     core/storage/innerPackets/BasePacket.h \
     core/workers/Worker.h \

@@ -2,10 +2,8 @@
 
 #include <QDateTime>
 #include <QDebug>
-
-//
 #include <QThread>
-//
+
 
 Logger* Logger::instance = 0;
 
@@ -35,13 +33,12 @@ LogRecord Logger::recordLog(QString className, QString data) {
 
     QDateTime currentDateTime = QDateTime::currentDateTime();
 
-    qDebug() << "Logger thread: " << QThread::currentThread()->objectName();
-
     QString logData;
 
     logData.append("Время: {" + currentDateTime.toString("hh:mm:ss dd.MM.yyyy") + "}")
            .append(" Класс: {" + className + "}")
-           .append(" " + data);
+           .append(" Поток: {" + QThread::currentThread()->objectName() + "}")
+           .append(" | " + data);
 
 
     Logger::mutex.lock();
